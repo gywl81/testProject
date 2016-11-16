@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scanPeriod="30 seconds" scan="true">
+
+<!-- console로 log 남기기 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                ▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <appender name="consoleForLoginInterceptor" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                ▷ %-5level %d{HH:mm:ss} %logger[%method:%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+ 
+ 
+<!-- file로 log 남기기 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                ▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="file" class="ch.qos.logback.core.FileAppender">
+        <file>d:\logs\testFile.log</file>
+        <encoder>
+            <pattern>
+                ▶ %-5level %d{HH:mm:ss.SSS} [%thread] %logger[%method:%line] - %msg%n
+                <!-- [%method:%line] : 어떤 메소드에 어떤 라인에서 찍혔는지 %msg%n : 찍고 싶은 로그-->
+            </pattern>
+        </encoder>
+    </appender>
+    
+    <!-- class만 따로 지정해서 이 클래스만 로그를 따로 관리할 수 있다. LoginInterceptor class 파일만 따로 로그 관리 -->
+    <appender name="fileForLoginInterceptor" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>d:\logs\testRollingFile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        
+            <!-- d:\logs\ testRollingFile 2015-04-07-15.log 파일 생성 -->
+            <fileNamePattern>d:\logs\testRollingFile.%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+        
+            <!-- 30시간 지난건 지우겠다. -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                ▷ %-5level %d{HH:mm:ss} %logger[%method:%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    
+	<appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+	    <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+	        <debug>true</debug>
+	        <driverClass>com.mysql.jdbc.Driver</driverClass>
+		       <url>jdbc:mysql://58.102.122.105:3306/tdrive_db</url>
+		       <user>tdrive</user>
+		       <password>tdrive1234</password>
+	    </connectionSource>
+	    <insertHeaders>true</insertHeaders>
+	</appender>
+	
+        
+    <!-- 이 아래에 있는 애들 다 log로 찍겠다. -->
+  	<logger name="commonLogger" level="debug">
+    	<appender-ref ref="console"/>
+    	<appender-ref ref="file"/>
+  	</logger>
+  	<logger name="allLogger" level="debug">
+    	<appender-ref ref="console"/>
+    	<appender-ref ref="file"/>
+  	</logger>
+  	<logger name="partLogger" level="debug">
+  		<appender-ref ref="console"/>
+  	</logger>
+  
+  	<logger name="com.sktelecom.tdrive" level="debug">
+    	<appender-ref ref="console"/>
+    	<appender-ref ref="file"/>
+    	<appender-ref ref="DB"/>
+  	</logger>
+  
+	<logger name="java.sql" >
+	  <level value="debug"/>
+	  <appender-ref ref="console"/>
+	  <appender-ref ref="file"/>
+	</logger>
+	
+	<!-- SQL문만을 로그로 남기며, PreparedStatement일 경우 관련된 argument 값으로 대체된 SQL문이 보여진다. -->
+	<logger name="jdbc.sqlonly">
+	    <level value="debug"/>
+	    <appender-ref ref="console"/>
+	    <appender-ref ref="file"/>
+	</logger>
+	
+	<!-- SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. -->
+	<logger name="jdbc.sqltiming">
+	    <level value="debug"/>
+	    <appender-ref ref="console"/>
+	    <appender-ref ref="file"/>
+	</logger>
+	<!-- ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로 특별히 JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다. -->
+	<logger name="jdbc.audit">
+	    <level value="error"/>
+	    <appender-ref ref="console"/>
+	    <appender-ref ref="file"/>
+	</logger>
+	<!-- ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다. -->
+	<logger name="jdbc.resultset">
+	    <level value="error"/>
+	    <appender-ref ref="console"/>
+	    <appender-ref ref="file"/>
+	</logger>  
+  
+    <root level="debug" >
+<!--     
+        <appender-ref ref="console" />
+        <appender-ref ref="file" />
+ -->        
+    </root>
+        
+</configuration>

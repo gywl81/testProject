@@ -1,0 +1,19 @@
+{
+	"keys":
+	    [
+			{
+			  "kid": "signKey",
+			  "alg":"HS256",
+			  "kty":"oct",
+			  "k":"QNIoqu9L55aZtAoNxHdrZPBU2U7rEktSWd4g3An6x5M"
+			}
+			,
+			{
+			  "kid": "encKey",
+			  "alg":"A256KW",
+			  "kty": "oct",
+			  "use": "enc",
+			  "k": "BM5s_HJ2l407TZ1lfVPxKgzNZBoPh1A7FPcdFeflwqM"
+			}
+		]
+}
